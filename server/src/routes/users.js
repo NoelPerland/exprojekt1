@@ -26,15 +26,15 @@ router.post("/login", async (req, res) => {
 
   const user = await UserModel.findOne({ username: username });
   if (!user) {
-    return res.json({ message: "User Does Not Exist" }); // Corrected from res.josn
+    return res.json({ message: "User Does Not Exist" }); // Check get request with postman
   }
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     // Corrected from "!isPasswordValid"
-    return res.json({ message: "Username or Password is Incorrect!" }); // Corrected from res.josn
+    return res.json({ message: "Username or Password is Incorrect!" });
   }
   const token = jwt.sign({ id: user._id }, "secret");
-  res.json({ token, userID: user._id }); // Corrected from res.josn
+  res.json({ token, userID: user._id });
 });
 export { router as userRouter };
