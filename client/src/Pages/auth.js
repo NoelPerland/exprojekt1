@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 
 export const Auth = () => {
   return (
@@ -10,11 +11,18 @@ export const Auth = () => {
 };
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  //const onSubmit
   return (
-    <div className="container mx-auto text-center">
-      <h2 className="text-2xl font-bold">Login</h2>
-      <div></div>
-    </div>
+    <Form
+      username={username}
+      setUsername={setUsername}
+      password={password}
+      setPassword={setPassword}
+      label="Login"
+    />
   );
 };
 
@@ -22,10 +30,42 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post("http://localhost:3001/auth/register", {
+        username,
+        password,
+      });
+      alert("Registration Completed!");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  return (
+    <Form
+      username={username}
+      setUsername={setUsername}
+      password={password}
+      setPassword={setPassword}
+      onSubmit={onSubmit}
+      label="Register"
+    />
+  );
+};
+
+const Form = ({
+  username,
+  setUsername,
+  password,
+  setPassword,
+  label,
+  onSubmit,
+}) => {
   return (
     <div className="auth-container flex justify-center items-center">
-      <form className="w-1/3">
-        <h2 className="text-2xl font-bold text-center mb-4">Register</h2>
+      <form onSubmit={onSubmit}>
+        <h2 className="text-2xl font-bold text-center mb-4"> {label} </h2>
         <div className="form-group">
           <label htmlFor="username" className="text-lg font-bold">
             Username:
@@ -54,7 +94,7 @@ const Register = () => {
           type="submit"
           className="bg-blue-700 hover:bg-blue-900 text-white font-medium py-2 px-4 rounded-lg"
         >
-          Register
+          {label}
         </button>
       </form>
     </div>
